@@ -1,13 +1,13 @@
-import { Component, inject } from '@angular/core';
 
-import { DataService } from './services/data.service';
-import { ParentComponent } from "./shareData/parent/parent.component";
-import { EnfantComponent } from "./shareData/enfant/enfant.component";
+import { Component } from '@angular/core';
+import { FormulaireComponent } from "./components/formulaire/formulaire.component";
 
 @Component({
     selector: 'app-root',
     standalone: true,
-    template: `<p>Angular Pour les Debutant</p><app-enfant/>`,
+    template: `
+    <app-formulaire/>
+    `,
     styles: [
         `
       p {
@@ -16,7 +16,7 @@ import { EnfantComponent } from "./shareData/enfant/enfant.component";
       }
     `,
     ],
-    imports: [ParentComponent, EnfantComponent]
+    imports: [FormulaireComponent]
 })
 export class AppComponent {
   title = 'angular-projet-first';
