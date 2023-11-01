@@ -29,7 +29,7 @@ import { Observable } from 'rxjs';
     `,
   ],
 })
-export class AddPostComponent {
+export default class AddPostComponent {
   @Input() post!: Post;
   private ps = inject(PostService);
   addResult!: Observable<Post>;

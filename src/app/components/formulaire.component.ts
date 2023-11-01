@@ -62,7 +62,7 @@ import {
     `,
   ],
 })
-export class FormulaireComponent {
+export  default class FormulaireComponent {
   profileForm = new FormGroup({
     nom: new FormControl('', Validators.required),
     postNom: new FormControl('', Validators.required),

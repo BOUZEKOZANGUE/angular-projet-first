@@ -2,9 +2,11 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PostService } from '../services/post.service';
 import { Post } from '../services/post.model';
-import { EditPostComponent } from './edit-post.component';
 import { Observable } from 'rxjs';
-import { AddPostComponent } from "./add-post.component";
+
+import EditPostComponent from './edit-post.component';
+import AddPostComponent from './add-post.component';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-post',
@@ -28,7 +30,7 @@ import { AddPostComponent } from "./add-post.component";
         {{deleteResult | async}}
         <div class="actions" align="end">
           
-          <button class="modifier" (click)="toogleMedia(post)">Editer</button>
+          <button class="modifier" (click)="goToEdit(post)">Editer</button>
           <button class="supprimer" (click)="onDelete(post.id)">Supprimer</button>
         </div>
       </div>
@@ -71,22 +73,24 @@ import { AddPostComponent } from "./add-post.component";
       }
     `,
     ],
-    imports: [CommonModule, EditPostComponent, AddPostComponent]
+    imports: [CommonModule,EditPostComponent,AddPostComponent ]
 })
-export class PostComponent {
+export default class PostComponent {
   showDialog = false;
   showDialog1 = false;
+
   post!: Post;
  //apres avoir remplir le service second etape je viens creer l'oservable ici 
   
   deleteResult!: Observable<Post>
+  private  router = inject (Router)
   private ps = inject(PostService);
   readonly posts = this.ps.getPost();
   
 
-  toogleMedia(post: Post) {
-    this.showDialog = !this.showDialog;
-    this.post = post;
+  goToEdit(post: Post) {
+    this.router.navigate(['/edit',`${post.id}`]);
+    //this.router.navigateByUrl(`/edit/${post.id}`);
   }
   toogleMediap(post: Post) {
     this.showDialog1 = !this.showDialog1;

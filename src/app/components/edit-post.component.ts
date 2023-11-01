@@ -4,6 +4,7 @@ import { Post } from '../services/post.model';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { PostService } from '../services/post.service';
 import { Observable } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-edit-post',
@@ -14,7 +15,7 @@ import { Observable } from 'rxjs';
       <h2>Modifier ce post</h2>
       <input type="text" placeholder="Titre" formControlName="title" />
       <input type="text" placeholder="Description" formControlName="body" />
-      {{editResult | async}}
+      {{ editResult | async }}
       <button type="submit">Valider la Modification</button>
     </form>
   `,
@@ -29,10 +30,12 @@ import { Observable } from 'rxjs';
     `,
   ],
 })
-export class EditPostComponent {
+export default class EditPostComponent {
   @Input() post!: Post;
   private ps = inject(PostService);
   editResult!: Observable<Post>;
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
   editPostForm = new FormGroup({
     title: new FormControl(''),
@@ -40,7 +43,11 @@ export class EditPostComponent {
   });
 
   ngOnInit(): void {
-    this.editPostForm.patchValue(this.post);
+    const postId = this.route.snapshot.paramMap.get('id');
+    this.ps.getOnePost(Number(postId)).subscribe((post) => {
+      this.post = post;
+      this.editPostForm.patchValue(post);
+    });
   }
 
   onSubmit() {
@@ -50,9 +57,8 @@ export class EditPostComponent {
       title: this.editPostForm.value.title!,
       body: this.editPostForm.value.body!,
     };
-    this.editResult = this.ps.putPost(post.id, post);
-    //actualiser la page avec location reload
-    location.reload();
+    this.ps.putPost(post.id, post).subscribe(() => {
+      this.router.navigate(['acceuil']);
+    });
   }
-  
 }

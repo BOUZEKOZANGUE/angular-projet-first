@@ -9,10 +9,14 @@ export class PostService {
   API = 'http://localhost:3000/post';
   private http = inject(HttpClient);
 
-  //les requetes du services au niveau de get pour recuperer les donnees
+  //les requetes du services au niveau de get pour recuperer tout les posts
   getPost() {
     return this.http.get<Post[]>(`${this.API}`);
   }
+    //les requetes du services au niveau de get pour recuperer un seul post
+    getOnePost(postId:number) {
+      return this.http.get<Post>(`${this.API}/${postId}`);
+    }
   //put pour les mises a jour
   putPost(postId: number, post: Post) {
     return this.http.put<Post>(`${this.API}/${postId}`, post);
